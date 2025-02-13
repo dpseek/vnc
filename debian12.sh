@@ -44,6 +44,35 @@ sudo apt install wget -y
 sudo apt install mlocate -y
 sudo apt install ccrypt -y
 
+#!/bin/bash
+
+# Install Brave Browser on Debian 12 (Bookworm)
+set -e
+
+# Update package lists
+echo "Updating package lists..."
+sudo apt update
+
+# Install necessary dependencies
+echo "Installing dependencies..."
+sudo apt install apt-transport-https curl gnupg -y
+
+# Add Brave Browser's repository key
+echo "Adding Brave Browser repository key..."
+curl -s https://brave-browser-apt-release.s3.brave.com/brave-core.asc | sudo apt-key --keyring /etc/apt/trusted.gpg.d/brave-browser-release.gpg add -
+
+# Add Brave Browser's repository
+echo "Adding Brave Browser repository..."
+echo "deb [signed-by=/etc/apt/trusted.gpg.d/brave-browser-release.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+
+# Update package lists again
+echo "Updating package lists again..."
+sudo apt update
+
+# Install Brave Browser
+echo "Installing Brave Browser..."
+sudo apt install brave-browser -y
+
 ################################################################################################################################################
 #### BYE BYE  !!! #### ----------------------------------------------------------------------------------------------------------------- #######
 ################################################################################################################################################
