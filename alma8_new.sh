@@ -26,31 +26,6 @@ yum -y install jq
 timedatectl set-timezone Europe/Paris
 
 ################################################################################################################################################
-#### CHANGE SSH PORT TO 4477 AND SET HOSTNAME #### ------------------------------------------------------------------------------------- #######
-################################################################################################################################################
-
-NEW_SSH_PORT=4477
-
-cp /etc/ssh/sshd_config /etc/ssh/sshd_config_backup
-sed -i "s/#Port 22/Port $NEW_SSH_PORT/g" /etc/ssh/sshd_config
-
-# Wait for firewalld to be active
-until systemctl is-active firewalld; do
-  echo "Waiting for firewalld to start..."
-  sleep 2
-done
-
-firewall-cmd --zone=public --add-port=$NEW_SSH_PORT/tcp --permanent
-firewall-cmd --reload
-
-systemctl restart firewalld # Redundant but safe
-
-####### SET HOSTNAME #######
-SERVER_IP=$(hostname -I | awk '{print $1}')
-hostnamectl set-hostname ${SERVER_IP}.myworld.com
-systemctl restart systemd-hostnamed
-
-################################################################################################################################################
 #### INSTALL VNC SERVER #### ----------------------------------------------------------------------------------------------------------- #######
 ################################################################################################################################################
 
@@ -129,9 +104,29 @@ semanage port -a -t ssh_port_t -p tcp 4477
 systemctl restart sshd.service
 
 ################################################################################################################################################
-#### FINAL SETUP MESSAGE TO TG #### ---------------------------------------------------------------------------------------------------- #######
+#### CHANGE SSH PORT TO 4477 AND SET HOSTNAME #### ------------------------------------------------------------------------------------- #######
 ################################################################################################################################################
 
+NEW_SSH_PORT=4477
+
+cp /etc/ssh/sshd_config /etc/ssh/sshd_config_backup
+sed -i "s/#Port 22/Port $NEW_SSH_PORT/g" /etc/ssh/sshd_config
+
+# Wait for firewalld to be active
+until systemctl is-active firewalld; do
+  echo "Waiting for firewalld to start..."
+  sleep 2
+done
+
+firewall-cmd --zone=public --add-port=$NEW_SSH_PORT/tcp --permanent
+firewall-cmd --reload
+
+systemctl restart firewalld # Redundant but safe
+
+####### SET HOSTNAME #######
+SERVER_IP=$(hostname -I | awk '{print $1}')
+hostnamectl set-hostname ${SERVER_IP}.myworld.com
+systemctl restart systemd-hostnamed
 
 
 ################################################################################################################################################
