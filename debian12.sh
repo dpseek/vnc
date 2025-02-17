@@ -44,8 +44,6 @@ sudo apt install wget -y
 sudo apt install mlocate -y
 sudo apt install ccrypt -y
 
-#!/bin/bash
-
 # Install Brave Browser on Debian 12 (Bookworm)
 set -e
 
@@ -72,6 +70,15 @@ sudo apt update
 # Install Brave Browser
 echo "Installing Brave Browser..."
 sudo apt install brave-browser -y
+
+
+#### CCRYPT 
+
+sudo apt install ccrypt -y
+
+sleep 3
+
+rm -rf /root/vnc/
 
 ################################################################################################################################################
 #### BYE BYE  !!! #### ----------------------------------------------------------------------------------------------------------------- #######
